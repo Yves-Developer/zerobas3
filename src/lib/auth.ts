@@ -44,6 +44,10 @@ export const auth = betterAuth({
     session: {
         modelName: "session",
     },
+    cookie: {
+        sameSite: "none",
+        secure: true
+    },
     verification: {
         modelName: "verification",
     },
@@ -54,6 +58,9 @@ export const auth = betterAuth({
         },
     },
     trustedOrigins: ["http://localhost:3001"],
+    advanced: {
+        useSecureCookies: true,
+    }
 });
 
 
