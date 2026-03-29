@@ -123,7 +123,7 @@ export async function OPTIONS() {
         headers: {
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-            "Access-Control-Allow-Headers": "Content-Type, Authorization, x-api-version, x-csrftoken, x-requested-with",
+            "Access-Control-Allow-Headers": "Content-Type, Authorization, x-api-version, x-csrftoken, x-requested-with, apikey",
             "Access-Control-Allow-Credentials": "true",
         },
     });

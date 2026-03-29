@@ -76,3 +76,15 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ tab
         return NextResponse.json({ error: e.message }, { status: 400 });
     }
 }
+
+export async function OPTIONS() {
+    return new NextResponse(null, {
+        status: 204,
+        headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Authorization, x-api-version, x-csrftoken, x-requested-with, apikey",
+            "Access-Control-Allow-Credentials": "true",
+        },
+    });
+}
