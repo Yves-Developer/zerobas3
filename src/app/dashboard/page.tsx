@@ -124,20 +124,31 @@ export default function DashboardPage() {
                     <label className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Project URL</label>
                     <div className="flex gap-2">
                         <code className="flex-1 bg-muted p-2 rounded-md text-[10px] font-mono truncate text-foreground/80 leading-relaxed ring-1 ring-border">
-                            {typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000'}/api/v1
+                            {typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000'}
                         </code>
-                        <Button size="icon" variant="ghost" className="h-8 w-8 text-muted-foreground hover:text-primary"><Copy className="h-3 w-3" /></Button>
+                        <Button size="icon" variant="ghost" className="h-8 w-8 text-muted-foreground hover:text-primary" onClick={() => {
+                            if (typeof window !== "undefined") {
+                                navigator.clipboard.writeText(window.location.origin);
+                                alert("URL copied!");
+                            }
+                        }}><Copy className="h-3 w-3" /></Button>
                     </div>
                 </div>
                 <div className="space-y-2">
-                    <label className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Client Key</label>
+                    <label className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Service Key</label>
                     <div className="flex gap-2">
-                        <code className="flex-1 bg-muted p-2 rounded-md text-[10px] font-mono truncate text-foreground/80 leading-relaxed ring-1 ring-border">zb_pk_test_a0x...99v</code>
-                        <Button size="icon" variant="ghost" className="h-8 w-8 text-muted-foreground hover:text-primary"><Copy className="h-3 w-3" /></Button>
+                        <code className="flex-1 bg-muted p-2 rounded-md text-[10px] font-mono truncate text-foreground/80 leading-relaxed ring-1 ring-border">
+                            {process.env.NODE_ENV === "production" ? "zb_sk_live_928374928374928374" : "zb_sk_test_1234567890abcdef"}
+                        </code>
+                        <Button size="icon" variant="ghost" className="h-8 w-8 text-muted-foreground hover:text-primary" onClick={() => {
+                            const key = process.env.NODE_ENV === "production" ? "zb_sk_live_928374928374928374" : "zb_sk_test_1234567890abcdef";
+                            navigator.clipboard.writeText(key);
+                            alert("Key copied!");
+                        }}><Copy className="h-3 w-3" /></Button>
                     </div>
                 </div>
                 <div className="pt-4 border-t">
-                    <p className="text-xs text-muted-foreground text-center">Keep these keys safe. Never expose them in your client-side code unless using the public key.</p>
+                    <p className="text-xs text-muted-foreground text-center">Your project is running in <span className="font-bold text-primary italic uppercase">{process.env.NODE_ENV}</span> mode.</p>
                 </div>
             </CardContent>
         </Card>

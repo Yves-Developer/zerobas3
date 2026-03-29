@@ -145,8 +145,11 @@ export default function SettingsPage() {
                                         <div className="grid gap-2">
                                             <Label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Project Reference ID</Label>
                                             <div className="flex gap-2">
-                                                <Input defaultValue="zb-prod-8x92" readOnly className="font-mono text-xs bg-muted/40" />
-                                                <Button variant="outline" size="icon"><Copy className="h-4 w-4" /></Button>
+                                                <Input value={process.env.NODE_ENV === "production" ? "zb-prod-8x92" : "zb-dev-local"} readOnly className="font-mono text-xs bg-muted/40" />
+                                                <Button variant="outline" size="icon" onClick={() => {
+                                                    navigator.clipboard.writeText(process.env.NODE_ENV === "production" ? "zb-prod-8x92" : "zb-dev-local");
+                                                    alert("Project Ref copied!");
+                                                }}><Copy className="h-4 w-4" /></Button>
                                             </div>
                                         </div>
                                     </div>
@@ -216,7 +219,7 @@ export default function SettingsPage() {
                                             <div className="relative flex-1">
                                                 <Input 
                                                     type={showKey ? "text" : "password"} 
-                                                    defaultValue="zb_sk_live_928374928374928374" 
+                                                    value={process.env.NODE_ENV === "production" ? "zb_sk_live_928374928374928374" : "zb_sk_test_1234567890abcdef"} 
                                                     readOnly 
                                                     className="font-mono text-xs pr-10" 
                                                 />
@@ -227,7 +230,11 @@ export default function SettingsPage() {
                                                     {showKey ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                                                 </button>
                                             </div>
-                                            <Button variant="outline" className="gap-2 text-xs font-bold uppercase tracking-widest"><Copy className="h-3.5 w-3.5" /> Copy</Button>
+                                            <Button variant="outline" className="gap-2 text-xs font-bold uppercase tracking-widest" onClick={() => {
+                                                const key = process.env.NODE_ENV === "production" ? "zb_sk_live_928374928374928374" : "zb_sk_test_1234567890abcdef";
+                                                navigator.clipboard.writeText(key);
+                                                alert("Key copied!");
+                                            }}><Copy className="h-3.5 w-3.5" /> Copy</Button>
                                         </div>
                                         <p className="text-[10px] text-destructive/80 italic mt-1 font-medium select-none flex items-center gap-1.5">
                                             <Shield className="h-3 w-3" />
