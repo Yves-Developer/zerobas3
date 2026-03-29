@@ -41,8 +41,8 @@ export default function SettingsPage() {
             const { getAuthSettings } = await import("@/actions/auth-settings");
             const res = await getAuthSettings();
             if (res.success && res.data) {
-                const clientId = res.data.find(c => c.key === "GOOGLE_CLIENT_ID")?.value || "";
-                const clientSecret = res.data.find(c => c.key === "GOOGLE_CLIENT_SECRET")?.value || "";
+                const clientId = res.data.find((c: { key: string; value: string }) => c.key === "GOOGLE_CLIENT_ID")?.value || "";
+                const clientSecret = res.data.find((c: { key: string; value: string }) => c.key === "GOOGLE_CLIENT_SECRET")?.value || "";
                 setGoogleClientId(clientId);
                 setGoogleClientSecret(clientSecret);
             }
