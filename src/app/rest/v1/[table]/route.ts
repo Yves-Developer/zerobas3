@@ -45,13 +45,24 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ tab
         
         if (dataArray.length === 0) return NextResponse.json([]);
         
+        // Ensure each item has default fields if missing
+        for (const item of dataArray) {
+            if (!item.id) item.id = crypto.randomUUID();
+            if (!item.createdAt) item.createdAt = new Date();
+            if (!item.updatedAt) item.updatedAt = new Date();
+        }
+
         const keys = Object.keys(dataArray[0]);
         const cols = keys.map(k => `"${k}"`).join(', ');
         
         // Basic batch insert
         let allResults = [];
         for (const item of dataArray) {
-             const values = keys.map(k => item[k]);
+             const values = keys.map(k => {
+                 const v = item[k];
+                 if (v === undefined) return null;
+                 return v;
+             });
              const vals = values.map((_, i) => `$${i + 1}`).join(', ');
              const query = `INSERT INTO "${table}" (${cols}) VALUES (${vals}) RETURNING *`;
              const result = await db.$queryRawUnsafe(query, ...values);

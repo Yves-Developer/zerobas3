@@ -23,12 +23,48 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 
 export default function SettingsPage() {
+    const [googleClientId, setGoogleClientId] = useState("");
+    const [googleClientSecret, setGoogleClientSecret] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
     const [showKey, setShowKey] = useState(false);
     const [activeTab, setActiveTab] = useState("General");
+
+    const [isSaving, setIsSaving] = useState(false);
+
+    useEffect(() => {
+        const fetchSettings = async () => {
+            setIsLoading(true);
+            const { getAuthSettings } = await import("@/actions/auth-settings");
+            const res = await getAuthSettings();
+            if (res.success && res.data) {
+                const clientId = res.data.find(c => c.key === "GOOGLE_CLIENT_ID")?.value || "";
+                const clientSecret = res.data.find(c => c.key === "GOOGLE_CLIENT_SECRET")?.value || "";
+                setGoogleClientId(clientId);
+                setGoogleClientSecret(clientSecret);
+            }
+            setIsLoading(false);
+        };
+        fetchSettings();
+    }, []);
+
+    const handleSave = async () => {
+        setIsSaving(true);
+        const { saveAuthSettings } = await import("@/actions/auth-settings");
+        const res = await saveAuthSettings([
+            { key: "GOOGLE_CLIENT_ID", value: googleClientId },
+            { key: "GOOGLE_CLIENT_SECRET", value: googleClientSecret }
+        ]);
+        setIsSaving(false);
+        if (res.success) {
+            alert("Settings saved successfully!");
+        } else {
+            alert("Error saving settings: " + res.error);
+        }
+    };
     
     return (
         <div className="flex flex-col h-[calc(100vh-120px)] -m-10 bg-background border rounded-xl overflow-hidden shadow-2xl">
@@ -47,8 +83,14 @@ export default function SettingsPage() {
                     </div>
                 </div>
                 <div className="flex items-center gap-3">
-                    <Button size="sm" className="h-9 gap-2 shadow-lg shadow-primary/20">
-                        <Save className="h-3.5 w-3.5" /> Save Changes
+                    <Button 
+                        size="sm" 
+                        className="h-9 gap-2 shadow-lg shadow-primary/20"
+                        disabled={isSaving}
+                        onClick={handleSave}
+                    >
+                        <Save className="h-3.5 w-3.5" /> 
+                        {isSaving ? "Saving..." : "Save Changes"}
                     </Button>
                 </div>
             </div>
@@ -196,7 +238,70 @@ export default function SettingsPage() {
                             </section>
                         )}
 
-                        {activeTab !== "General" && activeTab !== "API Keys" && (
+                        {activeTab === "Authentication" && (
+                            <section className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                                <div className="space-y-4">
+                                    <div>
+                                        <h3 className="text-lg font-bold flex items-center gap-2">
+                                            <Shield className="h-5 w-5 text-primary" />
+                                            Authenticaton Method
+                                        </h3>
+                                        <p className="text-sm text-muted-foreground mt-1">Configure your authentication providers and security policies.</p>
+                                    </div>
+
+                                    <div className="grid gap-6 p-6 rounded-2xl bg-card border shadow-sm">
+                                        <div className="flex justify-between items-center bg-accent/20 p-4 rounded-xl mb-2">
+                                            <div className="flex gap-4 items-center">
+                                                <div className="bg-primary/20 p-3 rounded-lg">
+                                                    <Globe className="h-6 w-6 text-primary" />
+                                                </div>
+                                                <div>
+                                                    <div className="font-bold flex items-center gap-2">Google Auth <Badge className="bg-primary/10 text-primary border-primary/20 hover:bg-primary/20 text-[9px] h-4">Official Provider</Badge></div>
+                                                    <p className="text-[10px] text-muted-foreground italic mt-0.5 font-medium select-none">Configured via the client-side Google OAuth platform</p>
+                                                </div>
+                                            </div>
+                                            <div className="flex gap-2">
+                                                <Button variant="outline" size="sm" className="h-8 text-[10px] font-bold uppercase tracking-widest gap-2">
+                                                   <ExternalLink className="h-3 w-3" /> Console
+                                                </Button>
+                                            </div>
+                                        </div>
+
+                                        <div className="grid md:grid-cols-2 gap-4">
+                                            <div className="space-y-2">
+                                                <Label className="text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Google Client ID</Label>
+                                                <Input 
+                                                    placeholder="Enter Client ID" 
+                                                    value={googleClientId}
+                                                    onChange={(e) => setGoogleClientId(e.target.value)}
+                                                    className="font-mono text-xs border-primary/10 bg-primary/5 focus:bg-background transition-all"
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <Label className="text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Google Client Secret</Label>
+                                                <div className="relative">
+                                                    <Input 
+                                                        type={showKey ? "text" : "password"}
+                                                        placeholder="Enter Client Secret" 
+                                                        value={googleClientSecret}
+                                                        onChange={(e) => setGoogleClientSecret(e.target.value)}
+                                                        className="font-mono text-xs border-primary/10 bg-primary/5 focus:bg-background transition-all pr-10"
+                                                    />
+                                                    <button 
+                                                        onClick={() => setShowKey(!showKey)}
+                                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors"
+                                                    >
+                                                        {showKey ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        )}
+
+                        {activeTab !== "General" && activeTab !== "API Keys" && activeTab !== "Authentication" && (
                             <div className="h-96 flex flex-col items-center justify-center text-muted-foreground italic gap-4 animate-pulse">
                                 <Settings className="h-12 w-12 opacity-10" />
                                 <span>{activeTab} configuration is managed via the main dashboard.</span>

@@ -71,6 +71,7 @@ export default function SDKTestPage() {
         setDataLoading(true);
         setStatus(null);
         try {
+            console.log(tableName)
             const { data, error } = await zb.from(tableName).select("*");
             if (error) throw error;
             setTableData(data || []);
