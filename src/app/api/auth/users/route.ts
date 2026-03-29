@@ -25,6 +25,7 @@ export async function POST(req: NextRequest) {
 
         const user = await db.user.create({
             data: { 
+                id: crypto.randomUUID(),
                 email, 
                 name,
             }
