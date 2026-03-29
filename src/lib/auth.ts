@@ -29,13 +29,12 @@ export const auth = betterAuth({
         modelName: "user",
     },
     account: {
-        modelName: "account",
         fields: {
             providerId: "provider",
             accountId: "providerAccountId",
             accessToken: "access_token",
             refreshToken: "refresh_token",
-            expiresAt: "expires_at",
+            accessTokenExpiresAt: "expires_at",
             tokenType: "token_type",
             scope: "scope",
             idToken: "id_token",
@@ -54,6 +53,7 @@ export const auth = betterAuth({
             clientSecret: googleClientSecret!,
         },
     },
+    trustedOrigins: ["http://localhost:3001"],
 });
 
 
