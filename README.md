@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ZeroBase 🚀
 
-## Getting Started
+A lightweight, self-hosted Supabase alternative built with Next.js 15, Prisma, and Better Auth.
 
-First, run the development server:
+## Features
+- **Database Explorer**: View and edit tables with a familiar data grid.
+- **SQL Editor**: Execute raw SQL queries directly from the browser with Monaco Editor.
+- **Image Storage**: Manage buckets and files with an intuitive explorer.
+- **Authentication**: Seamless Google Auth integration via [Better Auth](https://github.com/better-auth/better-auth).
+- **Client SDK**: A familiar `.from('table').select('*')` syntax for your frontend.
+- **Coolify Ready**: Designed for effortless deployment on any VPS with Coolify.
 
+## 🛠 Tech Stack
+- **Framework**: Next.js 15 (App Router)
+- **Database**: PostgreSQL + Prisma
+- **Auth**: Better Auth
+- **UI**: shadcn/ui + TailwindCSS 4
+- **Editor**: Monaco Editor
+
+## 🚀 Getting Started
+
+1. **Clone and Install**:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. **Environment Variables**:
+Copy `.env.example` to `.env` and fill in your PostgreSQL URL and Auth secrets.
+```bash
+cp .env.example .env
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. **Prisma Setup**:
+Generate the client and push the schema to your DB.
+```bash
+npx prisma generate
+npx prisma db push
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. **Run Development Server**:
+```bash
+npm run dev
+```
 
-## Learn More
+## 📦 Using the SDK
 
-To learn more about Next.js, take a look at the following resources:
+```typescript
+import { createClient } from './lib/zerobase-client';
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+const zerobase = createClient('http://localhost:3000', 'your-api-key');
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+// Fetch data
+const { data, error } = await zerobase.from('User').select('*');
 
-## Deploy on Vercel
+// Auth
+await zerobase.auth.signInWithGoogle();
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+// Storage
+await zerobase.storage.from('avatars').upload('my-face.png', file);
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🚢 Deployment (Coolify)
+ZeroBase is designed to be deployed as a single Docker container. Simply point Coolify to this repository, and it will auto-detect the Next.js setup.
+
+---
+Built with ❤️ by Antigravity

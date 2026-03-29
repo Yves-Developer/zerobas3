@@ -1,0 +1,19 @@
+{
+  "name": "zerobase-sdk-js",
+  "version": "1.1.0",
+  "description": "The official SDK for ZeroBase - A self-hosted Supabase alternative.",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean"
+  },
+  "devDependencies": {
+    "better-auth": "^1.5.6",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3"
+  }
+}

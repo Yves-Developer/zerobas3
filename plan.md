@@ -46,37 +46,50 @@ A developer-friendly dashboard and SDK that provides the core features of Supaba
 
 ### [ZB-001] Project Scaffolding & Core UI
 **Goal**: Initialize the Next.js app and set up the design system.
+**Status**: COMPLETED ✅
 **Tasks**:
-- [ ] Run `npx create-next-app@latest zerobase-dashboard` (COMPLETED for root)
-- [ ] Initialize shadcn/ui and custom theme. (PENDING)
-- [ ] Setup Prisma with PostgreSQL connection. (PENDING)
-- [ ] Create basic Dashboard Layout with Sidebar. (PENDING)
+- [x] Run `npx create-next-app@latest .`
+- [x] Initialize shadcn/ui and custom theme. 
+- [x] Setup Prisma with PostgreSQL connection. 
+- [x] Create basic Dashboard Layout with Sidebar. 
 
-### [ZB-002] Better Auth Integration
-**Goal**: Implement robust authentication with Google support.
+### [ZB-002] Dashboard Pages & Aesthetic Polish
+**Goal**: Build the primary management interfaces.
+**Status**: IN PROGRESS 🏗️
 **Tasks**:
-- [ ] Install `better-auth`.
-- [ ] Configure Google OAuth client.
+- [x] Implement Database Table Grid UI.
+- [x] Implement SQL Editor with Monaco integration.
+- [x] Implement Storage Bucket browser.
+- [x] Implement User Auth management table.
+
+### [ZB-003] Better Auth Integration
+**Goal**: Implement robust authentication with Google support.
+**Status**: IN PROGRESS 🏗️
+**Tasks**:
+- [x] Configure Google OAuth client (via `src/lib/auth.ts` config and `/api/auth/[...all]` handler).
 - [ ] Create `/auth` login/signup pages.
 - [ ] Add auth protection middleware.
 
-### [ZB-003] Database Explorer (Table View)
-**Goal**: Build a UI to view and edit postgres tables.
+### [ZB-004] Database API (PostgREST-like)
+**Goal**: Dynamic API routes for table CRUD.
+**Status**: COMPLETED ✅
 **Tasks**:
-- [ ] Create dynamic API routes to fetch table metadata.
-- [ ] Implement `<DataTable />` using `@tanstack/react-table`.
-- [ ] Add "New Row" and "Edit Row" modals.
+- [x] Create dynamic API routes to fetch table metadata via Prisma (`/api/db/tables`).
+- [x] Implement generic CRUD endpoints for all tables (`/rest/v1/[table]` and `/api/db/[table]`).
+- [x] Add "New Row" and "Edit Row" modals in dashboard.
 
-### [ZB-004] Storage Engine & UI
+### [ZB-005] Storage Engine (S3/Local)
 **Goal**: Manage image buckets and file uploads.
+**Status**: COMPLETED ✅
 **Tasks**:
-- [ ] Setup S3 client (AWS SDK).
-- [ ] Create storage API routes (`/api/storage/*`).
-- [ ] Build the Bucket/File explorer UI.
+- [x] Setup S3 client (AWS SDK).
+- [x] Create storage API routes (`/api/storage/*`).
+- [x] Link backend models with actual storage files.
 
-### [ZB-005] ZeroBase Client SDK
+### [ZB-006] ZeroBase Client SDK
 **Goal**: Create the developer interface for the frontend.
+**Status**: SCAFFOLDED 🏗️
 **Tasks**:
-- [ ] Scaffold `zerobase-js` library.
-- [ ] Implement query builder syntax: `.from('users').select('*')`.
-- [ ] Add `auth.signIn()` and `storage.upload()` methods.
+- [x] Implement query builder syntax: `.from('users').select('*')`.
+- [x] Add `auth.signIn()` and `storage.upload()` methods.
+- [ ] Package for npm distribution.
